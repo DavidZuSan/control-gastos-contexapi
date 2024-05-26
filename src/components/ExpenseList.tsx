@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useBudget } from "../hooks/useBudget";
-import ExpenseDetailt from "./ExpenseDetailt";
+import ExpenseDetail from "./ExpenseDetail";
 
 export default function ExpenseList() {
   const { state } = useBudget();
@@ -16,7 +16,7 @@ export default function ExpenseList() {
             Listado de Gastos
           </p>
           {state.expenses.map((expense) => (
-            <ExpenseDetailt key={expense.id} expense={expense} />
+            <ExpenseDetail key={expense.id} expense={expense} />
           ))}
         </>
       )}

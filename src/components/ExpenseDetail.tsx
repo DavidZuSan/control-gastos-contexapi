@@ -13,11 +13,11 @@ import { categories } from "../data/categories";
 import { useBudget } from "../hooks/useBudget";
 import "react-swipeable-list/dist/styles.css";
 
-type ExpenseDetailtProps = {
+type ExpenseDetailProps = {
   expense: Expense;
 };
 
-export default function ExpenseDetailt({ expense }: ExpenseDetailtProps) {
+export default function ExpenseDetail({ expense }: ExpenseDetailProps) {
   const { dispatch } = useBudget();
   const categoryInfo = useMemo(
     () => categories.filter((cat) => cat.id === expense.category)[0],
@@ -26,7 +26,13 @@ export default function ExpenseDetailt({ expense }: ExpenseDetailtProps) {
 
   const leadingActions = () => (
     <LeadingActions>
-      <SwipeAction onClick={() => {}}>Actualizar</SwipeAction>
+      <SwipeAction
+        onClick={() =>
+          dispatch({ type: "get-expense-by-id", payload: { id: expense.id } })
+        }
+      >
+        Actualizar
+      </SwipeAction>
     </LeadingActions>
   );
 
