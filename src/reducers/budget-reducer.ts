@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from "uuid"
 import { DraftExpense, Expense } from "../types"
+import ExpenseModal from "../components/ExpanseModal"
 
 export type BudgetActions = 
 { type: "add-budget", payload: {budget: number} } |
@@ -8,7 +9,8 @@ export type BudgetActions =
 { type: "add-expense", payload: {expense: DraftExpense} } |
 { type: "remove-expense", payload: {id: Expense['id']} } | 
 { type: "get-expense-by-id", payload: {id: Expense['id']} } |
-{ type: "update-expense", payload: {expense: Expense} }
+{ type: "update-expense", payload: {expense: Expense} } |
+{ type: "reset-app" }
 
 export type BudgetState = {
     budget: number
@@ -24,10 +26,21 @@ const createExpense = (draftExpense: DraftExpense): Expense => {
     }
 }
 
+const initialBuget = () : number => {
+    const localStoragedBudget = localStorage.getItem('budget');
+    return localStoragedBudget ? +localStoragedBudget : 0;
+}
+
+const localStorageExpense = () : Expense[] => {
+    const localStorageExpense = localStorage.getItem('expenses');
+    return localStorageExpense ? JSON.parse(localStorageExpense) : [];
+}
+
+
 export const initialState : BudgetState = {
-    budget: 0,
+    budget: initialBuget(),
     modal: false,
-    expenses: [],
+    expenses: localStorageExpense(),
     editingId: ''
 }
 
@@ -49,7 +62,8 @@ export const budgetReducer = (state: BudgetState = initialState, action: BudgetA
     if(action.type === "close-modal") {
         return {
             ...state,
-            modal: false
+            modal: false,
+            editingId: ''
         }
     }
 
@@ -84,6 +98,16 @@ export const budgetReducer = (state: BudgetState = initialState, action: BudgetA
             expenses: state.expenses.map(expense => 
                 expense.id === action.payload.expense.id ? action.payload.expense : expense
             ),
+            modal: false,
+            editingId: ''
+        }
+    }
+
+    if(action.type === "reset-app") {
+        return {
+            ...state,
+            budget: 0,
+            expenses: [],
         }
     }
 
