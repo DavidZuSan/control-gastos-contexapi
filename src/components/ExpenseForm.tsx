@@ -57,7 +57,7 @@ export default function ExpenseForm() {
     }
 
     // Validar presupuesto
-    if (expense.amount > remainingBudget) {
+    if (expense.amount - previousAmount > remainingBudget) {
       setError("El gasto supera el presupuesto restante");
       return;
     }
